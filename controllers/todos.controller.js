@@ -9,7 +9,7 @@ getAllTodos = async (req, res, next) => {
         return next(error);
     }
 
-    res.json({ todos });
+    res.json({ todos: todos });
 }
 
 addTodo = async (req, res, next) => {
@@ -19,7 +19,7 @@ addTodo = async (req, res, next) => {
 
     let insertedId;
     try {
-        const result = todo.save();
+        const result = await todo.save();
         insertedId = result.insertedId;
     } catch (error) {
         return next(error);
@@ -30,11 +30,40 @@ addTodo = async (req, res, next) => {
     res.json({ message: 'Added todo successfully!', createdTodo: todo });
 }
 
-updateTodos = (req, res, next) => { }
+updateTodos = async (req, res, next) => {
+    const todoId = req.params.id;
+    const newTodoText = req.body.newText;
 
-deleteTodos = (req, res, next) => { }
+    const todo = new Todo(newTodoText, todoId);
+
+    try {
+        await todo.save();
+    } catch (error) {
+        return next(error);
+    }
+
+    res.json({ message: 'Todo updated', updatedTodo: todo });
+
+
+}
+
+deleteTodos = async (req, res, next) => {
+    const todoId = req.params.id;
+
+    const todo = new Todo(null, todoId);
+
+    try {
+        await todo.delete();
+    } catch (error) {
+        return next(error);
+    }
+
+    res.json({ message: 'Todo deleted'});
+}
 
 module.exports = {
-    getAllTodos,
-    addTodo
+    getAllTodos: getAllTodos,
+    addTodo: addTodo,
+    updateTodos: updateTodos,
+    deleteTodos: deleteTodos
 }

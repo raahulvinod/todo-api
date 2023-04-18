@@ -8,4 +8,8 @@ router.get('/', todosController.getAllTodos);
 
 router.post('/', todosController.addTodo);
 
+router.patch('/:id', todosController.updateTodos);
+
+router.delete('/:id', todosController.deleteTodos);
+
 module.exports = router;

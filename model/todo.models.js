@@ -17,7 +17,7 @@ class Todo {
     }
 
     save() {
-        const todoId = mongodb.ObjectId(this.id);
+        const todoId = new mongodb.ObjectId(this.id);
         if (this.id) {
             return db
                 .getDb()
@@ -33,10 +33,10 @@ class Todo {
 
     delete() {
         if (!this.id) {
-            throw new Error('TRying to delete todo without id!');
+            throw new Error('Trying to delete todo without id!');
         }
 
-        const todoId = mongodb.ObjectId(this.id);
+        const todoId = new mongodb.ObjectId(this.id);
 
         return db.getDb().collection('todos').deleteOne({ _id: todoId });
     }
